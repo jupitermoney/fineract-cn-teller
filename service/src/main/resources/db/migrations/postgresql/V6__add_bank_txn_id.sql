@@ -17,6 +17,6 @@
 -- under the License.
 --
 
-ALTER TABLE tajet_teller_transactions ADD bank_txn_id VARCHAR(256) NOT NULL DEFAULT 'jupiter-txn-id';
+ALTER TABLE tajet_teller_transactions ADD bank_txn_id VARCHAR(256) NULL;
 ALTER TABLE tajet_teller_transactions ADD meta_info TEXT NULL;
 ALTER TABLE tajet_teller_transactions ADD CONSTRAINT bank_txn_id_unq UNIQUE (bank_txn_id);
