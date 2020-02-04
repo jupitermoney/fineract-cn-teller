@@ -184,7 +184,7 @@ public class TellerOperationRestController {
     if(optionalTellerTransaction.isPresent()){
       TellerTransaction tellerTransactionObj = optionalTellerTransaction.get();
       this.logger.info("Transaction with bank txn id {} already exists", tellerTransactionObj.getBankTxnId());
-      throw ServiceException.conflict("Transaction with bank txn id {} already exists", tellerTransactionObj.getBankTxnId());
+      throw ServiceException.conflict("Transaction with bank txn id {0} already exists", tellerTransactionObj.getBankTxnId());
     }
 
     this.verifyEmployee(teller);
