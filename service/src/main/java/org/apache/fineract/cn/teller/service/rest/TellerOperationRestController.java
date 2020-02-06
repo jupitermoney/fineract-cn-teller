@@ -262,6 +262,21 @@ public class TellerOperationRestController {
     );
   }
 
+  @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.TELLER_OPERATION)
+  @RequestMapping(
+          value = "/accounts/{accountId}/transactions",
+          method = RequestMethod.GET,
+          consumes = MediaType.ALL_VALUE,
+          produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseBody
+  ResponseEntity<List<TellerTransaction>> fetchTransactionsForAccount(@PathVariable("tellerCode") final String tellerCode, @PathVariable("accountId") final String accountId) {
+    this.verifyTeller(tellerCode);
+    return ResponseEntity.ok(
+            this.tellerOperationService.fetchTellerTransactionsForAccount(tellerCode, accountId)
+    );
+  }
+
   private Teller verifyTeller(final String tellerCode) {
     final Teller teller = this.tellerManagementService.findByIdentifier(tellerCode)
         .orElseThrow(() -> ServiceException.notFound("Teller {0} not found.", tellerCode));

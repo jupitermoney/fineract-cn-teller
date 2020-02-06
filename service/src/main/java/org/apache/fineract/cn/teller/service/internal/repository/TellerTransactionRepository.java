@@ -33,6 +33,8 @@ public interface TellerTransactionRepository extends JpaRepository<TellerTransac
 
   List<TellerTransactionEntity> findByTellerOrderByTransactionDateAsc(final TellerEntity teller);
 
+  List<TellerTransactionEntity> findByTellerAndCustomerAccountIdentifierOrderByTransactionDateDesc(final TellerEntity teller, final String customerAccountIdentifier);
+
   List<TellerTransactionEntity> findByTellerAndStateOrderByTransactionDateAsc(final TellerEntity teller,
                                                                               final String state);
 

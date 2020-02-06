@@ -189,6 +189,18 @@ public interface TellerManager {
                                 @RequestParam(value = "status", required = false) final String status);
 
   @RequestMapping(
+          value = "/teller/{tellerCode}/accounts/{accountId}/transactions",
+          method = RequestMethod.GET,
+          consumes = MediaType.APPLICATION_JSON_VALUE,
+          produces = MediaType.ALL_VALUE
+  )
+  @ThrowsExceptions({
+          @ThrowsException(status = HttpStatus.NOT_FOUND, exception = TellerNotFoundException.class)
+  })
+  List<TellerTransaction> fetchTransactionsForAccount(@PathVariable("tellerCode") final String tellerCode,
+                                @PathVariable("accountId") final String accountId);
+
+  @RequestMapping(
       value = "/offices/{officeIdentifier}/teller/{tellerCode}",
       method = RequestMethod.DELETE,
       consumes = MediaType.APPLICATION_JSON_VALUE,
