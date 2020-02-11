@@ -18,6 +18,7 @@
  */
 package org.apache.fineract.cn.teller.service.rest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.fineract.cn.teller.ServiceConstants;
 import org.apache.fineract.cn.teller.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.teller.api.v1.domain.MICR;
@@ -255,12 +256,19 @@ public class TellerOperationRestController {
   )
   @ResponseBody
   ResponseEntity<List<TellerTransaction>> fetch(@PathVariable("tellerCode") final String tellerCode,
-                                                @RequestParam(value = "status", required = false) final String status) {
+                                                @RequestParam(value = "status", required = false) final String status,
+                                                @RequestParam(value = "accountId", required = false) final String accountId) {
     this.verifyTeller(tellerCode);
-    return ResponseEntity.ok(
-        this.tellerOperationService.fetchTellerTransactions(tellerCode, status)
-    );
+    if(StringUtils.isEmpty(accountId)){
+      return ResponseEntity.ok(
+          this.tellerOperationService.fetchTellerTransactions(tellerCode, status)
+      );
+    }else{
+      return ResponseEntity.ok(
+              this.tellerOperationService.fetchTellerTransactionsForAccount(tellerCode, accountId));
+    }
   }
+
 
   private Teller verifyTeller(final String tellerCode) {
     final Teller teller = this.tellerManagementService.findByIdentifier(tellerCode)

@@ -129,4 +129,27 @@ public class TellerOperationService {
       throw ServiceException.notFound("Teller {0} not found.", tellerCode);
     }
   }
+
+    public List<TellerTransaction> fetchTellerTransactionsForAccount(final String tellerCode, String accountId) {
+        final Optional<TellerEntity> optionalTellerEntity = this.tellerRepository.findByIdentifier(tellerCode);
+        if (optionalTellerEntity.isPresent()) {
+            final TellerEntity tellerEntity = optionalTellerEntity.get();
+            return this.tellerTransactionRepository.findByTellerAndCustomerAccountIdentifierOrderByTransactionDateDesc(tellerEntity, accountId)
+                    .stream()
+                    .map(tellerTransactionEntity -> {
+                        final TellerTransaction tellerTransaction = TellerTransactionMapper.map(tellerTransactionEntity);
+                        if (tellerTransaction.getTransactionType().equals(ServiceConstants.TX_CHEQUE)) {
+                            final Optional<ChequeEntity> optionalCheque =
+                                    this.chequeRepository.findByTellerTransactionId(tellerTransactionEntity.getId());
+
+                            optionalCheque.ifPresent(chequeEntity -> tellerTransaction.setCheque(ChequeMapper.map(chequeEntity)));
+                        }
+                        return tellerTransaction;
+                    })
+                    .collect(Collectors.toList());
+
+        } else {
+            throw ServiceException.notFound("Teller {0} not found.", tellerCode);
+        }
+    }
 }

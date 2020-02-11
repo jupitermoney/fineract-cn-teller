@@ -186,7 +186,9 @@ public interface TellerManager {
       @ThrowsException(status = HttpStatus.NOT_FOUND, exception = TellerNotFoundException.class)
   })
   List<TellerTransaction> fetch(@PathVariable("tellerCode") final String tellerCode,
-                                @RequestParam(value = "status", required = false) final String status);
+                                @RequestParam(value = "status", required = false) final String status,
+                                @RequestParam(value = "accountId", required = false) final String accountId);
+
 
   @RequestMapping(
       value = "/offices/{officeIdentifier}/teller/{tellerCode}",
